@@ -113,6 +113,8 @@ for i in range(13):
         result[key]['avg_runtime'].append(get_avg_runtime(filename))
         result[key]['nodes_expanded'].append(get_avg_expanded(filename))
 
+AXIS_LABEL_SIZE = 12
+
 def plotAlgo(algo, value, isBottom, isRight):
     ax = plt.subplot(2, 2, 1 + 2 * isBottom + isRight)
 
@@ -128,6 +130,9 @@ def plotAlgo(algo, value, isBottom, isRight):
 
     if value == 'success_rate':
         ax.set_ylim(0, 1.1)
+    elif value == 'ratio_to_optimal':
+        ax.set_ylim(0.9, 5.5)
+
 
     if isRight:
         ax.yaxis.set_label_position('right')
@@ -137,16 +142,19 @@ def plotAlgo(algo, value, isBottom, isRight):
         ax.xaxis.set_label_position('top')
         ax.xaxis.tick_top()
 
-    plt.xlabel("Beam Width")
+    plt.xlabel("Beam Width", fontsize=AXIS_LABEL_SIZE)
 
     if unit := UNITS.get(value):
-        plt.ylabel(f"{value} ({unit})")
+        plt.ylabel(f"{value} ({unit})", fontsize=AXIS_LABEL_SIZE)
     else:
-        plt.ylabel(value)
+        plt.ylabel(value, fontsize=AXIS_LABEL_SIZE)
 
     plt.show()
 
 def plot_features(feature1, feature2, resultname):
+    fig, axs = plt.subplots(2, 2)
+    fig.align_labels()
+
     plotAlgo("beam", feature1, 0, 0)
     plotAlgo("depthfirstbeam", feature1, 0, 1, )
     plotAlgo("beam", feature2, 1, 0)
@@ -159,11 +167,16 @@ def plot_features(feature1, feature2, resultname):
     plt.subplots_adjust(top=0.82)
     plt.suptitle(title, fontweight='bold')
 
-    plt.savefig(f"{resultname}.png")
+
+
+    plt.savefig(f"results_figures/{resultname}.png")
     plt.close()
 
-plot_features("ratio_to_optimal", "success_rate", "solution_quality")
-plot_features("avg_runtime", "nodes_expanded", "performance")
+# plot_features("ratio_to_optimal", "success_rate", "solution_quality")
+# plot_features("avg_runtime", "nodes_expanded", "performance")
+
+print(get_avg_expanded("results/depthfirstbeam2048.csv"))
+print(get_avg_expanded("results/Rdepthfirstbeam2048.csv"))
 
 # for i in range(13):
 #     n = 2**i

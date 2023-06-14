@@ -2,6 +2,9 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
+AXIS_LABEL_SIZE = 14
+TICK_LABEL_SIZE = 11
+
 def analysis(filename, iter):
     with open(filename, 'r') as fp:
         r = csv.reader(fp)
@@ -79,9 +82,10 @@ def graph_stat(stat, algo, title = None):
 
 
     plt.xlim(0, TOTAL_WIDTH)
-    plt.xticks(group_centers, [f'{value} moves' for value in values])
-    plt.xlabel('rollout depth')
-    plt.ylabel(stat if stat != 'avg_distance' else 'ratio to optimal')
+    plt.xticks(group_centers, [f'{value} moves' for value in values], fontsize=TICK_LABEL_SIZE)
+    plt.yticks(fontsize=TICK_LABEL_SIZE)
+    plt.xlabel('rollout depth', fontsize=AXIS_LABEL_SIZE)
+    plt.ylabel(stat if stat != 'avg_distance' else 'ratio to optimal', fontsize=AXIS_LABEL_SIZE)
 
     if IS_RUNTIME:
         plt.axhline(y=BASELINE, color='r', linestyle='-', label='breadth first search')
@@ -102,7 +106,7 @@ graph_stat('avg_distance', 'mcts', 'Monte Carlo Tree Search + base heuristic')
 plt.subplot(1, 3, 3)
 graph_stat('avg_runtime', 'mcts', 'Monte Carlo Tree Search + base heuristic')
 
-plt.savefig('results/mcts.png', bbox_inches='tight')
+plt.savefig('results_figures/mcts.png', bbox_inches='tight')
 plt.close()
 
 plt.figure(figsize=(15, 5))
@@ -114,4 +118,4 @@ graph_stat('avg_distance', 'Rmcts', 'Monte Carlo Tree Search + recursive heurist
 plt.subplot(1, 3, 3)
 graph_stat('avg_runtime', 'Rmcts', 'Monte Carlo Tree Search + recursive heuristic')
 
-plt.savefig('results/Rmcts.png', bbox_inches='tight')
+plt.savefig('results_figures/Rmcts.png', bbox_inches='tight')
